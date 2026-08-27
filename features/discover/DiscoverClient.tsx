@@ -37,7 +37,7 @@ export function DiscoverClient({ initialDesigns, categories }: Props) {
     setLoading(true);
     try {
       if (category === 'all') {
-        const { data } = await supabaseClient
+        const { data } = await supabaseClient()
           .from('designs')
           .select('*, creators(*)')
           .eq('is_public', true)
@@ -47,7 +47,7 @@ export function DiscoverClient({ initialDesigns, categories }: Props) {
       } else {
         const catId = categories.find((c) => c.slug === category)?.id;
         if (catId) {
-          const { data } = await supabaseClient
+          const { data } = await supabaseClient()
             .from('design_categories')
             .select('designs!inner(*, creators(*))')
             .eq('category_id', catId);

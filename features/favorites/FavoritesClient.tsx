@@ -24,7 +24,7 @@ export function FavoritesClient() {
 
   useEffect(() => {
     async function loadDesigns() {
-      const { data } = await supabaseClient
+      const { data } = await supabaseClient()
         .from('designs')
         .select('*, creators(*)')
         .eq('is_public', true)

@@ -9,12 +9,18 @@
 import { createClient } from '@supabase/supabase-js';
 import { env } from '@/lib/env';
 
-// Singleton — safe because module-level state in the browser is per-tab.
-// persistSession: true so the anon client can also benefit from auth state
-// when used for data reads after login.
-export const supabaseClient = createClient(env.supabase.url, env.supabase.anonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  },
-});
+// Lazy singleton — created on first call so that build-time module evaluation
+// never triggers createClient with an empty URL (e.g. GitHub Pages CI).
+let _client: ReturnType<typeof createClient> | null = null;
+
+export function supabaseClient() {
+  if (!_client) {
+    _client = createClient(env.supabase.url, env.supabase.anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    });
+  }
+  return _client;
+}

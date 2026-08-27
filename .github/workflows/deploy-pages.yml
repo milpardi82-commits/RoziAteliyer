@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Disable API routes (incompatible with static export)
-        run: mv app/api app/_api_disabled
+        run: mv app/api _api_disabled
 
       - name: Disable middleware (incompatible with static export)
         run: mv middleware.ts middleware.ts.disabled

@@ -35,6 +35,9 @@ jobs:
       - name: Disable API routes (incompatible with static export)
         run: mv app/api app/_api_disabled
 
+      - name: Disable middleware (incompatible with static export)
+        run: mv middleware.ts middleware.ts.disabled
+
       - name: Build static export
         run: npm run build
         env:

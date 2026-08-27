@@ -14,20 +14,14 @@ const _siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 function requireEnv(value: string | undefined, key: string): string {
   if (!value) {
-    // In test / build environments the variables may not be present.
-    // We warn rather than throw so that `next build` does not crash when
-    // the variables will be injected at runtime (e.g. Netlify env vars).
-    if (process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
-      console.warn(
-        `[env] Missing required environment variable: ${key}. ` +
-          `Ensure it is set in your deployment environment.`
-      );
-      return '';
-    }
-    throw new Error(
-      `Missing required environment variable: ${key}\n` +
-        `Add it to your .env.local file (never commit secrets to source control).`
+    // Always warn instead of throwing — the real values will be injected
+    // at runtime by the hosting platform (e.g. Netlify environment variables).
+    // This allows `next build` to succeed without the variables present.
+    console.warn(
+      `[env] Missing environment variable: ${key}. ` +
+        `Set it in your deployment environment before going live.`
     );
+    return '';
   }
   return value;
 }
